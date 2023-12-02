@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Daten daten = dataSnapshot.child("daten").getValue(Daten.class);
                 Speisekarte speisekarte = dataSnapshot.child("speisekarte").child("G1").getValue(Speisekarte.class);
+                Tische tische = dataSnapshot.child("tische").child("T1").getValue(Tische.class);
                 String restaurantDaten =
                         "Name: " + daten.getName() + "\n" +
                         "Ort: " + daten.getOrt() + "\n" +
@@ -65,15 +66,20 @@ public class MainActivity extends AppCompatActivity {
                 for (Map.Entry<String, Boolean> entry : speisekarte.getZutaten().entrySet()) {
                     restaurantSpeisekarte.append(entry.getKey()).append(": ").append(entry.getValue() ? "Ja" : "Nein").append("\n");
                 }
+                StringBuilder restaurantTische = new StringBuilder();
+                restaurantTische.append("Bestellungen: ").append("\n");
+                for (Map.Entry<String, Integer> entry : tische.getBestellungen().entrySet()) {
+                    restaurantTische.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
+                }
+                restaurantTische.append("Personen: ").append(tische.getPersonen()).append("\n");
 
                 textViewDaten.setText(restaurantDaten);
                 textViewSpeisekarte.setText(restaurantSpeisekarte);
-                //textViewTische.setText(restaurantTische);
+                textViewTische.setText("Tisch1: "+"\n"+restaurantTische);
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
-            }
+            public void onCancelled(DatabaseError error) {}
         });
     }
 
